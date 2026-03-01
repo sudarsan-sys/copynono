@@ -1,0 +1,124 @@
+// server/prisma/schema.prisma
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // ERROR FIX: The 'url' line is REMOVED here because it is now inside prisma.config.ts
+}
+
+// --- 1. STUDENTS ---
+model Student {
+  regNo       String        @id // Matches 'roll_no'
+  name        String
+  dept        String        // 'department'
+  email       String?       @unique 
+  year        Int?          // 'year_of_study'
+  contactNo   String?       // 'contact_no'
+  gpa         Float?        // 'gpa'
+  incidents   Malpractice[]
+}
+
+// --- 2. EXAMS ---
+model Exam {
+  id          Int           @id @default(autoincrement()) // 'exam_id'
+  courseCode  String        @unique // e.g. "CS101"
+  courseTitle String        // 'course_title'
+  examDate    DateTime      // 'exam_date'
+  startTime   String        // 'start_time'
+  duration    Int           // 'duration' (minutes)
+  venue       String        // 'venue'
+  totalMarks  Int           // 'total_marks'
+  
+  incidents   Malpractice[] 
+}
+
+// --- 3. INVIGILATORS ---
+model Invigilator {
+  id             Int           @id @default(autoincrement()) // 'invigilator_id'
+  name           String
+  staffId        String        @unique // Login ID
+  email          String        @unique
+  employeeId     String?       @unique // 'employee_id'
+  phoneNo        String?       // 'phone_no'
+  dept           String?       // 'department'
+  roomAssignment String?       // 'room_assignment'
+  shiftTiming    String?       // 'shift_timing'
+  
+  reports        Malpractice[]
+}
+
+// --- 4. MALPRACTICE CASES ---
+model Malpractice {
+  id              Int      @id @default(autoincrement())
+  
+  studentReg      String
+  student         Student  @relation(fields: [studentReg], references: [regNo])
+  
+  invigilatorId   Int
+  invigilator     Invigilator @relation(fields: [invigilatorId], references: [id])
+  
+  // Keep existing Exam relations...
+  examId          Int?
+  exam            Exam?    @relation(fields: [examId], references: [id])
+  examCode        String
+  
+  status          String   @default("PENDING")
+  incidentDate    DateTime @default(now())
+  malpracticeType String?
+  severityLevel   String?
+
+  adminRemarks    String?
+  reviewedAt      DateTime?
+
+  // --- NEW FIELD FOR REQUIREMENT 2 ---
+  studentExplanation String?  // Stores the student's defense/response
+  
+  // Keep relations to ignored tables (AuditTrail, etc.) if they are already there,
+  // but we won't use them in logic.
+  action          DisciplinaryAction?
+  evidence        EvidenceVault[]
+}
+
+// --- 5. EVIDENCE VAULT ---
+model EvidenceVault {
+  id            Int         @id @default(autoincrement()) // 'evidence_id'
+  
+  caseId        Int         // 'case_id'
+  case          Malpractice @relation(fields: [caseId], references: [id])
+  
+  fileType      String      // 'file_type'
+  storageUrl    String      // 'storage_url'
+  fileSizeKb    Int?        // 'file_size_kb'
+  captureDevice String?     // 'capture_device'
+  uploadedAt    DateTime    @default(now()) // 'uploaded_at'
+  checksumHash  String?     // 'checksum_hash'
+  
+  // Perceptual hashing and duplicate detection
+  pHash         String?
+  isSuspectedDuplicate Boolean @default(false)
+  duplicateOfId Int?        // Link to another EvidenceVault ID or Malpractice ID
+}
+
+// --- 6. DISCIPLINARY ACTIONS ---
+model DisciplinaryAction {
+  id            Int         @id @default(autoincrement()) // 'action_id'
+  
+  caseId        Int         @unique // Links back to Malpractice Case
+  case          Malpractice @relation(fields: [caseId], references: [id])
+  
+  actionType    String      // 'action_type'
+  decisionDate  DateTime    @default(now()) // 'decision_date'
+  effectiveDate DateTime?   // 'effective_date'
+  decidedBy     String?     // 'decided_by'
+  penaltyAmount Float?      // 'penalty_amount'
+  remarks       String?     // 'remarks'
+}
+
+
+
+
