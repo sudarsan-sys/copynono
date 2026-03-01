@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+
+/* University Exam Malpractice Detection System - Design System */
+
+@layer base {
+  :root {
+    /* Core University Blue Theme */
+    --background: 210 40% 98%;
+    --foreground: 215 35% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 35% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 35% 15%;
+
+    /* Deep University Blue */
+    --primary: 215 65% 25%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Light Sky Blue */
+    --secondary: 210 50% 95%;
+    --secondary-foreground: 215 65% 25%;
+
+    --muted: 210 30% 94%;
+    --muted-foreground: 215 20% 45%;
+
+    /* Gold Accent */
+    --accent: 45 90% 55%;
+    --accent-foreground: 215 35% 15%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 30% 88%;
+    --input: 210 30% 88%;
+    --ring: 215 65% 45%;
+
+    --radius: 0.75rem;
+
+    /* Semantic Colors */
+    --success: 152 60% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 95% 55%;
+    --warning-foreground: 38 50% 15%;
+    --info: 210 80% 55%;
+    --info-foreground: 0 0% 100%;
+
+    /* Severity Colors */
+    --severity-minor: 152 60% 45%;
+    --severity-major: 38 95% 55%;
+    --severity-severe: 0 75% 55%;
+
+    /* Status Colors */
+    --status-pending: 38 95% 55%;
+    --status-review: 210 80% 55%;
+    --status-resolved: 152 60% 45%;
+    --status-dismissed: 215 15% 55%;
+    --status-draft: 215 15% 70%;
+
+    /* Glassmorphism */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-border: 0 0% 100% / 0.3;
+    --glass-shadow: 215 65% 25% / 0.08;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(215 65% 25%) 0%, hsl(215 65% 35%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(210 50% 96%) 0%, hsl(210 60% 92%) 50%, hsl(215 50% 90%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(45 90% 55%) 0%, hsl(38 85% 50%) 100%);
+
+    /* Sidebar */
+    --sidebar-background: 215 65% 25%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 45 90% 55%;
+    --sidebar-primary-foreground: 215 35% 15%;
+    --sidebar-accent: 215 65% 35%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 50% 35%;
+    --sidebar-ring: 45 90% 55%;
+  }
+
+  .dark {
+    --background: 215 35% 10%;
+    --foreground: 210 40% 98%;
+
+    --card: 215 35% 12%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 215 35% 12%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 60% 60%;
+    --primary-foreground: 215 35% 10%;
+
+    --secondary: 215 30% 18%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 30% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 45 85% 50%;
+    --accent-foreground: 215 35% 10%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 30% 22%;
+    --input: 215 30% 22%;
+    --ring: 210 60% 60%;
+
+    --sidebar-background: 215 40% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 45 85% 50%;
+    --sidebar-primary-foreground: 215 35% 10%;
+    --sidebar-accent: 215 35% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 30% 18%;
+    --sidebar-ring: 45 85% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/30;
+    box-shadow: 0 8px 32px hsl(var(--glass-shadow));
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 rounded-xl;
+    box-shadow: 0 4px 24px hsl(var(--glass-shadow));
+  }
+
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background: var(--gradient-primary);
+  }
+}
